@@ -382,25 +382,38 @@ async function isSessionAuthenticated(request, env) {
 }
 
 /**
- * 处理登录请求
+ * 处理登录请求 - 已修改为免密模式
  */
 async function handleLogin(request, env) {
 	try {
-		const { username, password } = await request.json();
-		if (username === env.USERNAME && password === env.PASSWORD) {
-			const sessionId = crypto.randomUUID();
-			const sessionData = { username, loggedInAt: Date.now() };
+		// 仍然解析输入，以防前端报错
+		const { username } = await request.json(); 
+		
+		// 强制通过验证，不再对比 env.USERNAME 和 env.PASSWORD
+		const sessionId = crypto.randomUUID();
+		
+		// 使用环境变量中的用户名，如果环境变量也没设，则默认叫 admin
+		const finalUsername = env.USERNAME || "admin";
+		const sessionData = { username: finalUsername, loggedInAt: Date.now() };
+		
+		// 写入 Session 到 KV（注意：请确保你后台的 KV 绑定名称确实是 NOTES_KV）
+		if (env.NOTES_KV) {
 			await env.NOTES_KV.put(`session:${sessionId}`, JSON.stringify(sessionData), {
 				expirationTtl: SESSION_DURATION_SECONDS,
 			});
-			const headers = new Headers();
-			headers.append('Set-Cookie', `${SESSION_COOKIE}=${sessionId}; HttpOnly; Secure; SameSite=Strict; Max-Age=${SESSION_DURATION_SECONDS}`);
-			return jsonResponse({ success: true }, 200, headers);
 		}
+
+		const headers = new Headers();
+		headers.append('Set-Cookie', `${SESSION_COOKIE}=${sessionId}; HttpOnly; Secure; SameSite=Strict; Max-Age=${SESSION_DURATION_SECONDS}`);
+		
+		// 返回成功，前端会自动跳转主页
+		return jsonResponse({ success: true }, 200, headers);
+		
 	} catch (e) {
-		console.error("Login Error:", e.message);
+		console.error("Login Bypass Error:", e.message);
+		// 如果因为 KV 没绑定导致报错，这里直接返回成功尝试“强行登录”
+		return jsonResponse({ success: true, message: "Bypassed with error" }, 200);
 	}
-	return jsonResponse({ error: 'Invalid credentials' }, 401);
 }
 
 /**
