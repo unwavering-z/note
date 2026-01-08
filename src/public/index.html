@@ -4337,18 +4337,18 @@
 		const selectedValue = expirationSelect.value;
 
 		if (selectedValue === 'revoke') {
-			const confirmed = await showCustomConfirm('Are you sure you want to revoke the public links immediately? This action cannot be undone.');
+			const confirmed = await showCustomConfirm('您确定要立即撤销公开链接吗？此操作无法撤销。');
 			if (confirmed) {
-				expirationStatus.textContent = 'Revoking...';
+				expirationStatus.textContent = '撤销中...';
 				expirationSelect.disabled = true;
 				try {
 					const response = await fetch(`/api/notes/${noteId}/share`, { method: 'DELETE' });
 					if (!response.ok) {
 						const err = await response.json();
-						throw new Error(err.error || 'Failed to revoke share link.');
+						throw new Error(err.error || '撤销共享链接失败.');
 					}
 					closeShareModal();
-					showCustomAlert('Sharing has been successfully revoked.', 'info');
+					showCustomAlert('分享权限已成功撤销.', '信息');
 				} catch (error) {
 					showCustomAlert(`Error: ${error.message}`, 'error');
 					expirationStatus.textContent = 'Error!';
@@ -4364,7 +4364,7 @@
 
 		if (!noteId || !currentPublicId) return;
 
-		expirationStatus.textContent = 'Updating...';
+		expirationStatus.textContent = '更新中...';
 		expirationSelect.disabled = true;
 
 		try {
@@ -4379,10 +4379,10 @@
 
 			if (!response.ok) {
 				const err = await response.json();
-				throw new Error(err.error || 'Failed to update expiration.');
+				throw new Error(err.error || '更新到期时间失败.');
 			}
 
-			expirationStatus.textContent = 'Updated!';
+			expirationStatus.textContent = '已更新!';
 			setTimeout(() => {
 				expirationStatus.textContent = '';
 			}, 2000);
@@ -4414,13 +4414,13 @@
 		try {
 			await navigator.clipboard.writeText(inputElement.value);
 			const originalText = buttonElement.textContent;
-			buttonElement.textContent = 'Copied!';
+			buttonElement.textContent = '已复制!';
 			setTimeout(() => {
 				buttonElement.textContent = originalText;
 			}, 2000);
 		} catch (err) {
-			console.error('Failed to copy text: ', err);
-			showCustomAlert('Failed to copy link.', 'error');
+			console.error('复制文本失败: ', err);
+			showCustomAlert('复制链接失败.', 'error');
 		}
 	}
 
