@@ -895,7 +895,7 @@
 			if (!activeNoteId || saveBtn.disabled) return;
 			const content = quill.root.innerHTML;
 			saveBtn.disabled = true;
-			saveBtn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> Saving...';
+			saveBtn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> 保存中...';
 			try {
 				await api.saveNode(activeNoteId, content);
 				saveBtn.innerHTML = '<i class=\'fas fa-check\'></i> 已保存';
