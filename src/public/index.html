@@ -4117,15 +4117,15 @@
 				await navigator.clipboard.writeText(codeToCopy);
 				copyButton.innerHTML = successIcon;
 				copyButton.classList.add('copied');
-				copyButton.title = 'Copied!';
+				copyButton.title = '已复制';
 				setTimeout(() => {
 					copyButton.innerHTML = originalIcon;
 					copyButton.classList.remove('copied');
-					copyButton.title = 'Copy code';
+					copyButton.title = '复制代码';
 				}, 2000);
 			} catch (err) {
 				console.error('Failed to copy text: ', err);
-				copyButton.title = 'Copy failed!';
+				copyButton.title = '复制失败!';
 			}
 		}
 	});
@@ -4446,7 +4446,7 @@
 			// 在归档视图下，只可能显示 "Unarchive"
 			archiveBtn.style.display = settings.showArchive ? '' : 'none'; // 同样要尊重设置
 			archiveBtn.classList.add('unarchive-mode');
-			archiveBtn.title = 'Unarchive';
+			archiveBtn.title = '取消存档';
 			archiveBtn.dataset.action = 'unarchive';
 
 			// 强制隐藏其他不相关的按钮
@@ -4456,7 +4456,7 @@
 			// 在常规视图下（Home, Favorites）
 			archiveBtn.style.display = settings.showArchive ? '' : 'none';
 			archiveBtn.classList.remove('unarchive-mode');
-			archiveBtn.title = 'Archive';
+			archiveBtn.title = '存档';
 			archiveBtn.dataset.action = 'archive';
 
 			// 只有在设置开启时，才显示收藏和置顶按钮
@@ -4467,11 +4467,11 @@
 			if (noteData) {
 				if (settings.showFavorites) {
 					favoriteBtn.classList.toggle('favorited', noteData.is_favorited);
-					favoriteBtn.title = noteData.is_favorited ? 'Unfavorite' : 'Favorite';
+					favoriteBtn.title = noteData.is_favorited ? '取消收藏' : '收藏';
 				}
 				if (settings.enablePinning) {
 					pinBtn.classList.toggle('pinned', noteData.is_pinned);
-					pinBtn.title = noteData.is_pinned ? 'Unpin' : 'Pin';
+					pinBtn.title = noteData.is_pinned ? '取消置顶' : 置顶';
 				}
 			}
 		}
@@ -4522,7 +4522,7 @@
 					const res = await fetch(`/api/notes/${noteId}`, { method: 'PUT', body: formData });
 					if (!res.ok) throw new Error('Failed to update favorite status.');
 					actionButton.classList.toggle('favorited', newFavoriteState);
-					actionButton.title = newFavoriteState ? 'Unfavorite' : 'Favorite';
+					actionButton.title = newFavoriteState ? '取消收藏' : '收藏';
 					const noteInCache = allNotesCache.find(n => n.id === parseInt(noteId));
 					if (noteInCache) noteInCache.is_favorited = newFavoriteState;
 				} catch (error) {
@@ -4542,7 +4542,7 @@
 					const res = await fetch(`/api/notes/${noteId}`, { method: 'PUT', body: formData });
 					if (!res.ok) throw new Error('Failed to update pin status.');
 					actionButton.classList.toggle('pinned', newPinState);
-					actionButton.title = newPinState ? 'Unpin' : 'Pin';
+					actionButton.title = newPinState ? '取消置顶' : '置顶';
 					const noteInCache = allNotesCache.find(n => n.id === parseInt(noteId));
 					if (noteInCache) noteInCache.is_pinned = newPinState;
 					await refreshNotes();
@@ -4623,7 +4623,7 @@
 			}
 			case 'delete': {
 				if (!noteElement) return;
-				const confirmed = await showCustomConfirm('Are you sure you want to delete this note?');
+				const confirmed = await showCustomConfirm('您确定要删除此笔记吗？');
 				if (!confirmed) return;
 				waterfallObserver.unobserve(noteElement);
 				try {
@@ -4790,7 +4790,7 @@
 		});
 
 		if (isInitialLoad && filteredData.length === 0 && !attachmentsState.hasMore) {
-			attachmentsContent.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No items to display.</p>';
+			attachmentsContent.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">暂无内容可显示。</p>';
 			return;
 		}
 
@@ -4936,12 +4936,12 @@
 
 				shareBtn.innerHTML = successIcon;
 				shareBtn.classList.add('copied');
-				shareBtn.title = 'Copied!';
+				shareBtn.title = '已复制';
 
 				setTimeout(() => {
 					shareBtn.innerHTML = originalIcon;
 					shareBtn.classList.remove('copied');
-					shareBtn.title = 'Get public link';
+					shareBtn.title = '获取公开链接';
 					shareBtn.disabled = false;
 				}, 2000);
 
@@ -5786,7 +5786,7 @@
 
 			case 'delete': {
 				if (!noteElement) return;
-				const confirmed = await showCustomConfirm('Are you sure you want to delete this note?');
+				const confirmed = await showCustomConfirm('您确定要删除此笔记吗？');
 				if (!confirmed) return;
 
 				// 复用现有的删除逻辑
@@ -7966,12 +7966,12 @@
 
 				shareBtn.innerHTML = successIcon;
 				shareBtn.classList.add('copied');
-				shareBtn.title = 'Copied!';
+				shareBtn.title = '已复制';
 
 				setTimeout(() => {
 					shareBtn.innerHTML = originalIcon;
 					shareBtn.classList.remove('copied');
-					shareBtn.title = 'Get public link';
+					shareBtn.title = '获取公开链接';
 					shareBtn.disabled = false;
 				}, 2000);
 
