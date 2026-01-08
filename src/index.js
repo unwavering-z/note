@@ -394,12 +394,12 @@ async function handleLogin(request, env) {
             const sessionId = crypto.randomUUID();
             const sessionData = { username, loggedInAt: Date.now() };
             
-            // 2. 修正 KV 绑定名称：使用你实际的 MEMOS_KV
-            if (!env.MEMOS_KV) {
-                throw new Error("检测到 MEMOS_KV 绑定不存在，请检查 Pages 设置中的变量名称是否准确。");
+            // 2. 修正 KV 绑定名称：使用你实际的 NOTES_KV
+            if (!env.NOTES_KV) {
+                throw new Error("检测到 NOTES_KV 绑定不存在，请检查 Pages 设置中的变量名称是否准确。");
             }
 
-            await env.MEMOS_KV.put(`session:${sessionId}`, JSON.stringify(sessionData), {
+            await env.NOTES_KV.put(`session:${sessionId}`, JSON.stringify(sessionData), {
                 expirationTtl: SESSION_DURATION_SECONDS,
             });
 
