@@ -803,7 +803,7 @@
 			editor.on('text-change', (delta, oldDelta, source) => {
 				if (source === 'user' && activeNoteId && saveBtn.disabled) {
 					saveBtn.disabled = false;
-					saveBtn.innerHTML = "<i class='fas fa-save'></i> Save";
+					saveBtn.innerHTML = "<i class='fas fa-save'></i> 保存";
 				}
 				setTimeout(updateOutline, 300);
 				if (source === 'user') {
@@ -883,7 +883,7 @@
 				quill.root.innerHTML = note.content || '';
 				updateOutline();
 				saveBtn.disabled = true;
-				saveBtn.innerHTML = '<i class=\'fas fa-check\'></i> Saved';
+				saveBtn.innerHTML = '<i class=\'fas fa-check\'></i> 已保存';
 			} catch (error) {
 				quill.root.innerHTML = `<h1>加载失败</h1><p>${error.message}</p>`;
 				activeNoteId = null;
@@ -898,10 +898,10 @@
 			saveBtn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> Saving...';
 			try {
 				await api.saveNode(activeNoteId, content);
-				saveBtn.innerHTML = '<i class=\'fas fa-check\'></i> Saved';
+				saveBtn.innerHTML = '<i class=\'fas fa-check\'></i> 已保存';
 			} catch (error) {
 				saveBtn.innerHTML = '<i class=\'fas fa-times\'></i> Error';
-				setTimeout(() => { saveBtn.disabled = false; saveBtn.innerHTML = '<i class=\'fas fa-save\'></i> Save'; }, 2000);
+				setTimeout(() => { saveBtn.disabled = false; saveBtn.innerHTML = '<i class=\'fas fa-save\'></i> 保存'; }, 2000);
 			}
 		}
 		async function handleDelete(nodeId) {
